@@ -13,7 +13,7 @@ function addTodo(){
 
     const divEl = document.createElement("h4");
     divEl.setAttribute("id",count);
-    divEl.innerHTML = `${count}. ${inputText} <button onclick='deleteTodo(${count})'>Delete</button>`;
+    divEl.innerHTML = `${inputText} <button onclick='deleteTodo(${count})'>Delete</button>`;
     count++;
     const parentElement = document.querySelector("body");
     parentElement.appendChild(divEl);
