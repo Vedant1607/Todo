@@ -1,43 +1,49 @@
 const buttonEl = document.getElementById("addTodo");
 
 let count = 0;
-
-function deleteTodo(index){
-    const element = document.getElementById(index);
-    // element.parentElement.removeChild(element);
-    if (element) {
-        element.remove();
-    } else {
-        console.error(`Task with ID task-${index} not found.`);
-    }
-}
+let todos = [];
 
 function addTodo(){
-    const input = document.querySelector('input');
-    const inputText = input.value.trim();
-
-    if (inputText === ""){
-        alert("Task cannot be empty!");
-        return;
-    }
-
-    const taskContainer = document.createElement("div");
-    taskContainer.setAttribute("id",count)
-
-    const taskText = document.createElement("h4");
-    taskText.textContent = inputText;
-
-    const delBtn = document.createElement('button');
-    delBtn.textContent = 'Delete';
-    delBtn.addEventListener("click",() => deleteTodo(count));
-
-    taskContainer.appendChild(taskText);
-    taskContainer.appendChild(delBtn);
-
-    document.body.appendChild(taskContainer);
-
-    input.value = "";
+    todos.push({
+        ctr:count,
+        title:document.querySelector('input').value
+    })
+    render();
+    count++;
 }
-count++;
+
+function deleteTodo(index){
+    // todos.pop();
+    // todos.splice(index,1);
+    todos = todos.filter(todo => todo.ctr !== index);
+    render();
+}
+
+function createTodoComponent(todo){
+    const div = document.createElement('div');
+    const text = document.createElement('p');
+    const dltbtn = document.createElement('button');
+
+    dltbtn.textContent = 'Delete';
+    dltbtn.addEventListener('click',()=>deleteTodo(todo.ctr));
+
+    text.textContent = todo.title;
+    div.setAttribute('id',todo.ctr);
+
+    div.appendChild(text);
+    div.appendChild(dltbtn);
+    
+    return div
+}
+
+function render(){
+    const container = document.getElementById('todos-container');
+    container.innerHTML = "";
+    document.querySelector("input").value = "";
+    for (let i=0;i<todos.length;i++){
+        let ele = createTodoComponent(todos[i]);
+        container.appendChild(ele);
+    }
+}
 
 buttonEl.addEventListener('click',addTodo);
